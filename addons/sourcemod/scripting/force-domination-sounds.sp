@@ -27,11 +27,11 @@ new Handle:g_Cvar_Cloaked;
 
 public Plugin:myinfo = 
 {
-	name = "Domination Sounds",
+	name = "Force Domination Sounds",
 	author = "Powerlord",
-	description = "For a player to play one of their domination sounds",
+	description = "Force a player to play one of their domination or revenge sounds",
 	version = VERSION,
-	url = "https://forums.alliedmods.net/showthread.php?t=215449"
+	url = "URL"
 }
 
 public OnPluginStart()
@@ -41,7 +41,7 @@ public OnPluginStart()
 	g_Cvar_Disguised = CreateConVar("dominationsounds_disguised", "0", "Play domination/revenge sounds while disguised?", FCVAR_PLUGIN, true, 0.0, true, 1.0);
 	g_Cvar_Cloaked = CreateConVar("dominationsounds_cloaked", "0", "Play domination/revenge sounds while cloaked?", FCVAR_PLUGIN, true, 0.0, true, 1.0);
 	LoadTranslations("common.phrases");
-	RegAdminCmd("domsound", Cmd_DomSound, ADMFLAG_GENERIC, "Force a player to play a domination sound.");
+	RegAdminCmd("dominationsound", Cmd_DomSound, ADMFLAG_GENERIC, "Force a player to play a domination sound.");
 	RegAdminCmd("revengesound", Cmd_RevengeSound, ADMFLAG_GENERIC, "Force a player to play a revenge sound.");
 	AutoExecConfig(true, "dominationsounds");
 }
@@ -50,7 +50,9 @@ public Action:Cmd_DomSound(client, args)
 {
 	if (args < 1)
 	{
-		ReplyToCommand(client, "Format: /domsound <target> [class]");
+		new String:cmdName[64];
+		GetCmdArg(0, cmdName, sizeof(cmdName));
+		ReplyToCommand(client, "Usage: %s <target> [class]", cmdName);
 	}
 	
 	new targets[MaxClients];
@@ -67,25 +69,25 @@ public Action:Cmd_DomSound(client, args)
 	{
 		case COMMAND_TARGET_NONE:
 		{
-			ReplyToCommand(client, "[DS] %t", "No matching client");
+			ReplyToCommand(client, "[FDS] %t", "No matching client");
 			return Plugin_Handled;
 		}
 		
 		case COMMAND_TARGET_NOT_ALIVE:
 		{
-			ReplyToCommand(client, "[DS] %t", "Target must be alive");
+			ReplyToCommand(client, "[FDS] %t", "Target must be alive");
 			return Plugin_Handled;
 		}
 		
 		case COMMAND_TARGET_NOT_IN_GAME:
 		{
-			ReplyToCommand(client, "[DS] %t", "Target is not in game");
+			ReplyToCommand(client, "[FDS] %t", "Target is not in game");
 			return Plugin_Handled;
 		}
 		
 		case COMMAND_TARGET_EMPTY_FILTER:
 		{
-			ReplyToCommand(client, "[DS] %t", "No matching clients");
+			ReplyToCommand(client, "[FDS] %t", "No matching clients");
 			return Plugin_Handled;
 		}
 		
@@ -104,7 +106,7 @@ public Action:Cmd_DomSound(client, args)
 		new String:classString[64];
 		GetCmdArg(2, classString, sizeof(classString));
 		
-		if (!StrContains(classString, "rand", false) == -1)
+		if (StrContains(classString, "rand", false) == -1)
 		{
 			targetClass = TF2_GetClass(classString);
 		}
@@ -148,11 +150,11 @@ public Action:Cmd_DomSound(client, args)
 	{
 		if (tn_is_ml)
 		{
-			ShowActivity2(client, "[DS] ", "Forced %t to play domination sound", targetName);
+			ShowActivity2(client, "[FDS] ", "Forced %t to play domination sound", targetName);
 		}
 		else
 		{
-			ShowActivity2(client, "[DS] ", "Forced %s to play domination sound", targetName);
+			ShowActivity2(client, "[FDS] ", "Forced %s to play domination sound", targetName);
 		}
 	}
 	
@@ -163,7 +165,9 @@ public Action:Cmd_RevengeSound(client, args)
 {
 	if (args < 1)
 	{
-		ReplyToCommand(client, "Format: /revengesound <target>");
+		new String:cmdName[64];
+		GetCmdArg(0, cmdName, sizeof(cmdName));
+		ReplyToCommand(client, "Usage: %s <target>", cmdName);
 	}
 	
 	new targets[MaxClients];
@@ -180,25 +184,25 @@ public Action:Cmd_RevengeSound(client, args)
 	{
 		case COMMAND_TARGET_NONE:
 		{
-			ReplyToCommand(client, "[DS] %t", "No matching client");
+			ReplyToCommand(client, "[FDS] %t", "No matching client");
 			return Plugin_Handled;
 		}
 		
 		case COMMAND_TARGET_NOT_ALIVE:
 		{
-			ReplyToCommand(client, "[DS] %t", "Target must be alive");
+			ReplyToCommand(client, "[FDS] %t", "Target must be alive");
 			return Plugin_Handled;
 		}
 		
 		case COMMAND_TARGET_NOT_IN_GAME:
 		{
-			ReplyToCommand(client, "[DS] %t", "Target is not in game");
+			ReplyToCommand(client, "[FDS] %t", "Target is not in game");
 			return Plugin_Handled;
 		}
 		
 		case COMMAND_TARGET_EMPTY_FILTER:
 		{
-			ReplyToCommand(client, "[DS] %t", "No matching clients");
+			ReplyToCommand(client, "[FDS] %t", "No matching clients");
 			return Plugin_Handled;
 		}
 		
@@ -236,11 +240,11 @@ public Action:Cmd_RevengeSound(client, args)
 	{
 		if (tn_is_ml)
 		{
-			ShowActivity2(client, "[DS] ", "Forced %t to play revenge sound", targetName);
+			ShowActivity2(client, "[FDS] ", "Forced %t to play revenge sound", targetName);
 		}
 		else
 		{
-			ShowActivity2(client, "[DS] ", "Forced %s to play revenge sound", targetName);
+			ShowActivity2(client, "[FDS] ", "Forced %s to play revenge sound", targetName);
 		}
 	}
 	
