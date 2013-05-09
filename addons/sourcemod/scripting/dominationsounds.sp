@@ -5,6 +5,8 @@
 
 #define VERSION "1.0"
 
+#pragma semicolon 1
+
 /*
 	TFClass_Unknown = 0,
 	TFClass_Scout,
@@ -20,6 +22,8 @@
 new String:g_ClassNames[TFClassType][16] = { "Unknown", "Scout", "Sniper", "Soldier", "Demoman", "Medic", "Heavy", "Pyro", "Spy", "Engineer"};
 
 new Handle:g_Cvar_Log;
+new Handle:g_Cvar_Disguised;
+new Handle:g_Cvar_Cloaked;
 
 public Plugin:myinfo = 
 {
@@ -34,6 +38,8 @@ public OnPluginStart()
 {
 	CreateConVar("dominationsounds_version", VERSION, "Domination Sounds version", FCVAR_PLUGIN|FCVAR_NOTIFY|FCVAR_DONTRECORD);
 	g_Cvar_Log = CreateConVar("dominationsounds_log", "1", "Log when a command forces a player to play a domination sound", FCVAR_PLUGIN|FCVAR_NOTIFY, true, 0.0, true, 1.0);
+	g_Cvar_Disguised = CreateConVar("dominationsounds_disguised", "0", "Play domination/revenge sounds while disguised?", FCVAR_PLUGIN, true, 0.0, true, 1.0);
+	g_Cvar_Cloaked = CreateConVar("dominationsounds_cloaked", "0", "Play domination/revenge sounds while cloaked?", FCVAR_PLUGIN, true, 0.0, true, 1.0);
 	LoadTranslations("common.phrases");
 	RegAdminCmd("domsound", Cmd_DomSound, ADMFLAG_GENERIC, "Force a player to play a domination sound.");
 	RegAdminCmd("revengesound", Cmd_RevengeSound, ADMFLAG_GENERIC, "Force a player to play a revenge sound.");
@@ -61,7 +67,7 @@ public Action:Cmd_DomSound(client, args)
 	{
 		case COMMAND_TARGET_NONE:
 		{
-			ReplyToCommand(client, "[DS] %t", "No matching client")
+			ReplyToCommand(client, "[DS] %t", "No matching client");
 			return Plugin_Handled;
 		}
 		
@@ -97,11 +103,26 @@ public Action:Cmd_DomSound(client, args)
 	{
 		new String:classString[64];
 		GetCmdArg(2, classString, sizeof(classString));
-		targetClass = TF2_GetClass(classString);
+		
+		if (!StrContains(classString, "rand", false) == -1)
+		{
+			targetClass = TF2_GetClass(classString);
+		}
 	}
 	
 	for (new i = 0; i < targetCount; ++i)
 	{
+		
+		if (!GetConVarBool(g_Cvar_Cloaked) && (TF2_IsPlayerInCondition(targets[i], TFCond_Cloaked) || TF2_IsPlayerInCondition(targets[i], TFCond_CloakFlicker)))
+		{
+			continue;
+		}
+		
+		if (!GetConVarBool(g_Cvar_Disguised) && TF2_IsPlayerInCondition(targets[i], TFCond_Disguised))
+		{
+			continue;
+		}
+		
 		new TFClassType:class = targetClass;
 		if (class == TFClass_Unknown)
 		{
@@ -112,15 +133,15 @@ public Action:Cmd_DomSound(client, args)
 		Format(classContext, sizeof(classContext), "victimclass:%s", g_ClassNames[class]);
 		
 		SetVariantString("domination:dominated");
-		AcceptEntityInput(i, "AddContext");
+		AcceptEntityInput(targets[i], "AddContext");
 		
 		SetVariantString(classContext);
-		AcceptEntityInput(i, "AddContext");
+		AcceptEntityInput(targets[i], "AddContext");
 		
 		SetVariantString("TLK_KILLED_PLAYER");
-		AcceptEntityInput(i, "SpeakResponseConcept");
+		AcceptEntityInput(targets[i], "SpeakResponseConcept");
 		
-		AcceptEntityInput(i, "ClearContext");
+		AcceptEntityInput(targets[i], "ClearContext");
 	}
 	
 	if (GetConVarBool(g_Cvar_Log))
@@ -159,7 +180,7 @@ public Action:Cmd_RevengeSound(client, args)
 	{
 		case COMMAND_TARGET_NONE:
 		{
-			ReplyToCommand(client, "[DS] %t", "No matching client")
+			ReplyToCommand(client, "[DS] %t", "No matching client");
 			return Plugin_Handled;
 		}
 		
@@ -192,13 +213,23 @@ public Action:Cmd_RevengeSound(client, args)
 	
 	for (new i = 0; i < targetCount; ++i)
 	{
+		if (!GetConVarBool(g_Cvar_Cloaked) && (TF2_IsPlayerInCondition(targets[i], TFCond_Cloaked) || TF2_IsPlayerInCondition(targets[i], TFCond_CloakFlicker)))
+		{
+			continue;
+		}
+		
+		if (!GetConVarBool(g_Cvar_Disguised) && TF2_IsPlayerInCondition(targets[i], TFCond_Disguised))
+		{
+			continue;
+		}
+		
 		SetVariantString("domination:revenge");
-		AcceptEntityInput(i, "AddContext");
+		AcceptEntityInput(targets[i], "AddContext");
 		
 		SetVariantString("TLK_KILLED_PLAYER");
-		AcceptEntityInput(i, "SpeakResponseConcept");
+		AcceptEntityInput(targets[i], "SpeakResponseConcept");
 		
-		AcceptEntityInput(i, "ClearContext");
+		AcceptEntityInput(targets[i], "ClearContext");
 	}
 	
 	if (GetConVarBool(g_Cvar_Log))
