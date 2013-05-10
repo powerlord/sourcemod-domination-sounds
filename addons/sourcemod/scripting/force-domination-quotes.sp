@@ -3,7 +3,7 @@
 #include <tf2>
 #include <sdktools>
 
-#define VERSION "1.1"
+#define VERSION "1.2"
 
 #pragma semicolon 1
 
@@ -31,7 +31,7 @@ public Plugin:myinfo =
 	author = "Powerlord",
 	description = "Force a player to play one of their domination or revenge quotes",
 	version = VERSION,
-	url = "URL"
+	url = "https://forums.alliedmods.net/showthread.php?t=215627"
 }
 
 public OnPluginStart()
