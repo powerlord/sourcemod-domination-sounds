@@ -1,0 +1,40 @@
+"Phrases"
+{
+	"DominationQuote Usage"
+	{
+		"#format"	"{1:s}"
+		"en"		"Usage: dominationquote <target> [class]"
+	}
+
+	"RevengeQuote Usage"
+	{
+		"#format"	"{1:s}"
+		"en"		"Usage: revengequote <target>"
+	}
+
+	"DominationQuote Activity Translation"
+	{
+		"#format"	"{1:t}"
+		"en"		"Forced {1} to play domination quote"
+	}
+
+	"DominationQuote Activity String"
+	{
+		"#format"	"{1:s}"
+		"en"		"Forced {1} to play domination quote"
+	}
+
+	"RevengeQuote Activity Translation"
+	{
+		"#format"	"{1:t}"
+		"en"		"Forced {1} to play revenge quote"
+	}
+
+	"RevengeQuote Activity String"
+	{
+		"#format"	"{1:s}"
+		"en"		"Forced {1} to play revenge quote"
+	}
+
+
+}

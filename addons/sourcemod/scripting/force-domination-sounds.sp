@@ -27,9 +27,9 @@ new Handle:g_Cvar_Cloaked;
 
 public Plugin:myinfo = 
 {
-	name = "Force Domination Sounds",
+	name = "Force Domination Quotes",
 	author = "Powerlord",
-	description = "Force a player to play one of their domination or revenge sounds",
+	description = "Force a player to play one of their domination or revenge quotes",
 	version = VERSION,
 	url = "URL"
 }
@@ -37,21 +37,21 @@ public Plugin:myinfo =
 public OnPluginStart()
 {
 	LoadTranslations("common.phrases");
-	LoadTranslations("force-domination-sounds.phrases");
-	CreateConVar("forcedominationsounds_version", VERSION, "Domination Sounds version", FCVAR_PLUGIN|FCVAR_NOTIFY|FCVAR_DONTRECORD);
-	g_Cvar_Log = CreateConVar("forcedominationsounds_log", "1", "Log when a command forces a player to play a domination sound", FCVAR_PLUGIN|FCVAR_NOTIFY, true, 0.0, true, 1.0);
-	g_Cvar_Disguised = CreateConVar("forcedominationsounds_disguised", "0", "Play domination/revenge sounds while disguised?", FCVAR_PLUGIN, true, 0.0, true, 1.0);
-	g_Cvar_Cloaked = CreateConVar("forcedominationsounds_cloaked", "0", "Play domination/revenge sounds while cloaked?", FCVAR_PLUGIN, true, 0.0, true, 1.0);
-	RegAdminCmd("dominationsound", Cmd_DomSound, ADMFLAG_GENERIC, "Force a player to play a domination sound.");
-	RegAdminCmd("revengesound", Cmd_RevengeSound, ADMFLAG_GENERIC, "Force a player to play a revenge sound.");
-	AutoExecConfig(true, "dominationsounds");
+	LoadTranslations("force-domination-quotes.phrases");
+	CreateConVar("forcedominationquotes_version", VERSION, "Force Domination Quotes version", FCVAR_PLUGIN|FCVAR_NOTIFY|FCVAR_DONTRECORD);
+	g_Cvar_Log = CreateConVar("forcedominationquotes_log", "1", "Log when a command forces a player to play a domination quote", FCVAR_PLUGIN|FCVAR_NOTIFY, true, 0.0, true, 1.0);
+	g_Cvar_Disguised = CreateConVar("forcedominationquotes_disguised", "0", "Play domination/revenge quotes while disguised?", FCVAR_PLUGIN, true, 0.0, true, 1.0);
+	g_Cvar_Cloaked = CreateConVar("forcedominationquotes_cloaked", "0", "Play domination/revenge quotes while cloaked?", FCVAR_PLUGIN, true, 0.0, true, 1.0);
+	RegAdminCmd("dominationquote", Cmd_DomSound, ADMFLAG_GENERIC, "Force a player to play a domination quote.");
+	RegAdminCmd("revengequote", Cmd_RevengeSound, ADMFLAG_GENERIC, "Force a player to play a revenge quote.");
+	AutoExecConfig(true, "dominationquotes");
 }
 
 public Action:Cmd_DomSound(client, args)
 {
 	if (args < 1)
 	{
-		ReplyToCommand(client, "%t", "DominationSound Usage");
+		ReplyToCommand(client, "%t", "DominationQuote Usage");
 	}
 	
 	new targets[MaxClients];
@@ -68,25 +68,25 @@ public Action:Cmd_DomSound(client, args)
 	{
 		case COMMAND_TARGET_NONE:
 		{
-			ReplyToCommand(client, "[FDS] %t", "No matching client");
+			ReplyToCommand(client, "[FDQ] %t", "No matching client");
 			return Plugin_Handled;
 		}
 		
 		case COMMAND_TARGET_NOT_ALIVE:
 		{
-			ReplyToCommand(client, "[FDS] %t", "Target must be alive");
+			ReplyToCommand(client, "[FDQ] %t", "Target must be alive");
 			return Plugin_Handled;
 		}
 		
 		case COMMAND_TARGET_NOT_IN_GAME:
 		{
-			ReplyToCommand(client, "[FDS] %t", "Target is not in game");
+			ReplyToCommand(client, "[FDQ] %t", "Target is not in game");
 			return Plugin_Handled;
 		}
 		
 		case COMMAND_TARGET_EMPTY_FILTER:
 		{
-			ReplyToCommand(client, "[FDS] %t", "No matching clients");
+			ReplyToCommand(client, "[FDQ] %t", "No matching clients");
 			return Plugin_Handled;
 		}
 		
@@ -151,14 +151,14 @@ public Action:Cmd_DomSound(client, args)
 		
 		if (tn_is_ml)
 		{
-			strcopy(phrase, sizeof(phrase), "DominationSound Activity Translation");
+			strcopy(phrase, sizeof(phrase), "DominationQuote Activity Translation");
 		}
 		else
 		{
-			strcopy(phrase, sizeof(phrase), "DominationSound Activity String");
+			strcopy(phrase, sizeof(phrase), "DominationQuote Activity String");
 		}
 		
-		ShowActivity2(client, "[FDS] ", "%t", phrase, targetName);
+		ShowActivity2(client, "[FDQ] ", "%t", phrase, targetName);
 	}
 	
 	return Plugin_Handled;
@@ -168,7 +168,7 @@ public Action:Cmd_RevengeSound(client, args)
 {
 	if (args < 1)
 	{
-		ReplyToCommand(client, "%t", "RevengeSound Usage");
+		ReplyToCommand(client, "%t", "RevengeQuote Usage");
 	}
 	
 	new targets[MaxClients];
@@ -185,25 +185,25 @@ public Action:Cmd_RevengeSound(client, args)
 	{
 		case COMMAND_TARGET_NONE:
 		{
-			ReplyToCommand(client, "[FDS] %t", "No matching client");
+			ReplyToCommand(client, "[FDQ] %t", "No matching client");
 			return Plugin_Handled;
 		}
 		
 		case COMMAND_TARGET_NOT_ALIVE:
 		{
-			ReplyToCommand(client, "[FDS] %t", "Target must be alive");
+			ReplyToCommand(client, "[FDQ] %t", "Target must be alive");
 			return Plugin_Handled;
 		}
 		
 		case COMMAND_TARGET_NOT_IN_GAME:
 		{
-			ReplyToCommand(client, "[FDS] %t", "Target is not in game");
+			ReplyToCommand(client, "[FDQ] %t", "Target is not in game");
 			return Plugin_Handled;
 		}
 		
 		case COMMAND_TARGET_EMPTY_FILTER:
 		{
-			ReplyToCommand(client, "[FDS] %t", "No matching clients");
+			ReplyToCommand(client, "[FDQ] %t", "No matching clients");
 			return Plugin_Handled;
 		}
 		
@@ -243,14 +243,14 @@ public Action:Cmd_RevengeSound(client, args)
 		
 		if (tn_is_ml)
 		{
-			strcopy(phrase, sizeof(phrase), "RevengeSound Activity Translation");
+			strcopy(phrase, sizeof(phrase), "RevengeQuote Activity Translation");
 		}
 		else
 		{
-			strcopy(phrase, sizeof(phrase), "RevengeSound Activity String");
+			strcopy(phrase, sizeof(phrase), "RevengeQuote Activity String");
 		}
 		
-		ShowActivity2(client, "[FDS] ", "%t", phrase, targetName);
+		ShowActivity2(client, "[FDQ] ", "%t", phrase, targetName);
 	}
 	
 	return Plugin_Handled;
