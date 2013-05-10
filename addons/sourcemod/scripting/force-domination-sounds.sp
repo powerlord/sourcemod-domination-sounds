@@ -38,10 +38,10 @@ public OnPluginStart()
 {
 	LoadTranslations("common.phrases");
 	LoadTranslations("force-domination-sounds.phrases");
-	CreateConVar("dominationsounds_version", VERSION, "Domination Sounds version", FCVAR_PLUGIN|FCVAR_NOTIFY|FCVAR_DONTRECORD);
-	g_Cvar_Log = CreateConVar("dominationsounds_log", "1", "Log when a command forces a player to play a domination sound", FCVAR_PLUGIN|FCVAR_NOTIFY, true, 0.0, true, 1.0);
-	g_Cvar_Disguised = CreateConVar("dominationsounds_disguised", "0", "Play domination/revenge sounds while disguised?", FCVAR_PLUGIN, true, 0.0, true, 1.0);
-	g_Cvar_Cloaked = CreateConVar("dominationsounds_cloaked", "0", "Play domination/revenge sounds while cloaked?", FCVAR_PLUGIN, true, 0.0, true, 1.0);
+	CreateConVar("forcedominationsounds_version", VERSION, "Domination Sounds version", FCVAR_PLUGIN|FCVAR_NOTIFY|FCVAR_DONTRECORD);
+	g_Cvar_Log = CreateConVar("forcedominationsounds_log", "1", "Log when a command forces a player to play a domination sound", FCVAR_PLUGIN|FCVAR_NOTIFY, true, 0.0, true, 1.0);
+	g_Cvar_Disguised = CreateConVar("forcedominationsounds_disguised", "0", "Play domination/revenge sounds while disguised?", FCVAR_PLUGIN, true, 0.0, true, 1.0);
+	g_Cvar_Cloaked = CreateConVar("forcedominationsounds_cloaked", "0", "Play domination/revenge sounds while cloaked?", FCVAR_PLUGIN, true, 0.0, true, 1.0);
 	RegAdminCmd("dominationsound", Cmd_DomSound, ADMFLAG_GENERIC, "Force a player to play a domination sound.");
 	RegAdminCmd("revengesound", Cmd_RevengeSound, ADMFLAG_GENERIC, "Force a player to play a revenge sound.");
 	AutoExecConfig(true, "dominationsounds");
