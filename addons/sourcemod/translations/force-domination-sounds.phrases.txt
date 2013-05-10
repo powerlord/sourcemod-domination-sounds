@@ -1,0 +1,40 @@
+"Phrases"
+{
+	"DominationSound Usage"
+	{
+		"#format"	"{1:s}"
+		"en"		"Usage: dominationsound <target> [class]"
+	}
+
+	"RevengeSound Usage"
+	{
+		"#format"	"{1:s}"
+		"en"		"Usage: revengesound <target>"
+	}
+
+	"DominationSound Activity Translation"
+	{
+		"#format"	"{1:t}"
+		"en"		"Forced {1} to play domination sound"
+	}
+
+	"DominationSound Activity String"
+	{
+		"#format"	"{1:s}"
+		"en"		"Forced {1} to play domination sound"
+	}
+
+	"RevengeSound Activity Translation"
+	{
+		"#format"	"{1:t}"
+		"en"		"Forced {1} to play revenge sound"
+	}
+
+	"RevengeSound Activity String"
+	{
+		"#format"	"{1:s}"
+		"en"		"Forced {1} to play revenge sound"
+	}
+
+
+}

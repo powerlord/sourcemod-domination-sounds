@@ -3,7 +3,7 @@
 #include <tf2>
 #include <sdktools>
 
-#define VERSION "1.0"
+#define VERSION "1.1"
 
 #pragma semicolon 1
 
@@ -36,11 +36,12 @@ public Plugin:myinfo =
 
 public OnPluginStart()
 {
+	LoadTranslations("common.phrases");
+	LoadTranslations("force-domination-sounds.phrases");
 	CreateConVar("dominationsounds_version", VERSION, "Domination Sounds version", FCVAR_PLUGIN|FCVAR_NOTIFY|FCVAR_DONTRECORD);
 	g_Cvar_Log = CreateConVar("dominationsounds_log", "1", "Log when a command forces a player to play a domination sound", FCVAR_PLUGIN|FCVAR_NOTIFY, true, 0.0, true, 1.0);
 	g_Cvar_Disguised = CreateConVar("dominationsounds_disguised", "0", "Play domination/revenge sounds while disguised?", FCVAR_PLUGIN, true, 0.0, true, 1.0);
 	g_Cvar_Cloaked = CreateConVar("dominationsounds_cloaked", "0", "Play domination/revenge sounds while cloaked?", FCVAR_PLUGIN, true, 0.0, true, 1.0);
-	LoadTranslations("common.phrases");
 	RegAdminCmd("dominationsound", Cmd_DomSound, ADMFLAG_GENERIC, "Force a player to play a domination sound.");
 	RegAdminCmd("revengesound", Cmd_RevengeSound, ADMFLAG_GENERIC, "Force a player to play a revenge sound.");
 	AutoExecConfig(true, "dominationsounds");
@@ -50,9 +51,7 @@ public Action:Cmd_DomSound(client, args)
 {
 	if (args < 1)
 	{
-		new String:cmdName[64];
-		GetCmdArg(0, cmdName, sizeof(cmdName));
-		ReplyToCommand(client, "Usage: %s <target> [class]", cmdName);
+		ReplyToCommand(client, "%t", "DominationSound Usage");
 	}
 	
 	new targets[MaxClients];
@@ -148,14 +147,18 @@ public Action:Cmd_DomSound(client, args)
 	
 	if (GetConVarBool(g_Cvar_Log))
 	{
+		new String:phrase[64];
+		
 		if (tn_is_ml)
 		{
-			ShowActivity2(client, "[FDS] ", "Forced %t to play domination sound", targetName);
+			strcopy(phrase, sizeof(phrase), "DominationSound Activity Translation");
 		}
 		else
 		{
-			ShowActivity2(client, "[FDS] ", "Forced %s to play domination sound", targetName);
+			strcopy(phrase, sizeof(phrase), "DominationSound Activity String");
 		}
+		
+		ShowActivity2(client, "[FDS] ", "%t", phrase, targetName);
 	}
 	
 	return Plugin_Handled;
@@ -165,9 +168,7 @@ public Action:Cmd_RevengeSound(client, args)
 {
 	if (args < 1)
 	{
-		new String:cmdName[64];
-		GetCmdArg(0, cmdName, sizeof(cmdName));
-		ReplyToCommand(client, "Usage: %s <target>", cmdName);
+		ReplyToCommand(client, "%t", "RevengeSound Usage");
 	}
 	
 	new targets[MaxClients];
@@ -238,14 +239,18 @@ public Action:Cmd_RevengeSound(client, args)
 	
 	if (GetConVarBool(g_Cvar_Log))
 	{
+		new String:phrase[64];
+		
 		if (tn_is_ml)
 		{
-			ShowActivity2(client, "[FDS] ", "Forced %t to play revenge sound", targetName);
+			strcopy(phrase, sizeof(phrase), "RevengeSound Activity Translation");
 		}
 		else
 		{
-			ShowActivity2(client, "[FDS] ", "Forced %s to play revenge sound", targetName);
+			strcopy(phrase, sizeof(phrase), "RevengeSound Activity String");
 		}
+		
+		ShowActivity2(client, "[FDS] ", "%t", phrase, targetName);
 	}
 	
 	return Plugin_Handled;
