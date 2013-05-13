@@ -3,7 +3,7 @@
 #include <tf2>
 #include <sdktools>
 
-#define VERSION "1.2"
+#define VERSION "1.3"
 
 #pragma semicolon 1
 
@@ -64,39 +64,10 @@ public Action:Cmd_DomSound(client, args)
 	
 	targetCount = ProcessTargetString(target, client, targets, MaxClients, COMMAND_FILTER_ALIVE|COMMAND_FILTER_NO_IMMUNITY, targetName, sizeof(targetName), tn_is_ml);
 	
-	switch(targetCount)
+	if (targetCount <= 0)
 	{
-		case COMMAND_TARGET_NONE:
-		{
-			ReplyToCommand(client, "[FDQ] %t", "No matching client");
-			return Plugin_Handled;
-		}
-		
-		case COMMAND_TARGET_NOT_ALIVE:
-		{
-			ReplyToCommand(client, "[FDQ] %t", "Target must be alive");
-			return Plugin_Handled;
-		}
-		
-		case COMMAND_TARGET_NOT_IN_GAME:
-		{
-			ReplyToCommand(client, "[FDQ] %t", "Target is not in game");
-			return Plugin_Handled;
-		}
-		
-		case COMMAND_TARGET_EMPTY_FILTER:
-		{
-			ReplyToCommand(client, "[FDQ] %t", "No matching clients");
-			return Plugin_Handled;
-		}
-		
-		default:
-		{
-			if (targetCount <= 0)
-			{
-				return Plugin_Handled;
-			}
-		}
+		ReplyToTargetError(client, targetCount);
+		return Plugin_Handled;
 	}
 	
 	new TFClassType:targetClass = TFClass_Unknown;
@@ -181,39 +152,10 @@ public Action:Cmd_RevengeSound(client, args)
 	
 	targetCount = ProcessTargetString(target, client, targets, MaxClients, COMMAND_FILTER_ALIVE|COMMAND_FILTER_NO_IMMUNITY, targetName, sizeof(targetName), tn_is_ml);
 	
-	switch(targetCount)
+	if (targetCount <= 0)
 	{
-		case COMMAND_TARGET_NONE:
-		{
-			ReplyToCommand(client, "[FDQ] %t", "No matching client");
-			return Plugin_Handled;
-		}
-		
-		case COMMAND_TARGET_NOT_ALIVE:
-		{
-			ReplyToCommand(client, "[FDQ] %t", "Target must be alive");
-			return Plugin_Handled;
-		}
-		
-		case COMMAND_TARGET_NOT_IN_GAME:
-		{
-			ReplyToCommand(client, "[FDQ] %t", "Target is not in game");
-			return Plugin_Handled;
-		}
-		
-		case COMMAND_TARGET_EMPTY_FILTER:
-		{
-			ReplyToCommand(client, "[FDQ] %t", "No matching clients");
-			return Plugin_Handled;
-		}
-		
-		default:
-		{
-			if (targetCount <= 0)
-			{
-				return Plugin_Handled;
-			}
-		}
+		ReplyToTargetError(client, targetCount);
+		return Plugin_Handled;
 	}
 	
 	for (new i = 0; i < targetCount; ++i)
