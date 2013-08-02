@@ -3,7 +3,7 @@
 #include <tf2>
 #include <sdktools>
 
-#define VERSION "1.3"
+#define VERSION "1.4"
 
 #pragma semicolon 1
 
@@ -21,6 +21,7 @@
 	*/
 new String:g_ClassNames[TFClassType][16] = { "Unknown", "Scout", "Sniper", "Soldier", "Demoman", "Medic", "Heavy", "Pyro", "Spy", "Engineer"};
 
+new Handle:g_Cvar_Enabled;
 new Handle:g_Cvar_Log;
 new Handle:g_Cvar_Disguised;
 new Handle:g_Cvar_Cloaked;
@@ -39,6 +40,7 @@ public OnPluginStart()
 	LoadTranslations("common.phrases");
 	LoadTranslations("force-domination-quotes.phrases");
 	CreateConVar("forcedominationquotes_version", VERSION, "Force Domination Quotes version", FCVAR_PLUGIN|FCVAR_NOTIFY|FCVAR_DONTRECORD);
+	g_Cvar_Enabled = CreateConVar("forcedominationquotes_enabled", "1", "Enable Force Domination Quotes?", FCVAR_PLUGIN|FCVAR_NOTIFY, true, 0.0, true, 1.0);
 	g_Cvar_Log = CreateConVar("forcedominationquotes_log", "1", "Log when a command forces a player to play a domination quote", FCVAR_PLUGIN|FCVAR_NOTIFY, true, 0.0, true, 1.0);
 	g_Cvar_Disguised = CreateConVar("forcedominationquotes_disguised", "0", "Play domination/revenge quotes while disguised?", FCVAR_PLUGIN, true, 0.0, true, 1.0);
 	g_Cvar_Cloaked = CreateConVar("forcedominationquotes_cloaked", "0", "Play domination/revenge quotes while cloaked?", FCVAR_PLUGIN, true, 0.0, true, 1.0);
@@ -49,9 +51,15 @@ public OnPluginStart()
 
 public Action:Cmd_DomSound(client, args)
 {
+	if (!GetConVarBool(g_Cvar_Enabled))
+	{
+		return Plugin_Handled;
+	}
+	
 	if (args < 1)
 	{
 		ReplyToCommand(client, "%t", "DominationQuote Usage");
+		return Plugin_Handled;
 	}
 	
 	new targets[MaxClients];
@@ -137,9 +145,15 @@ public Action:Cmd_DomSound(client, args)
 
 public Action:Cmd_RevengeSound(client, args)
 {
+	if (!GetConVarBool(g_Cvar_Enabled))
+	{
+		return Plugin_Handled;
+	}
+	
 	if (args < 1)
 	{
 		ReplyToCommand(client, "%t", "RevengeQuote Usage");
+		return Plugin_Handled;
 	}
 	
 	new targets[MaxClients];
